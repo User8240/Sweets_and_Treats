@@ -2,7 +2,7 @@
 
 #### By _**Grace Kostanich**_  
 
-#### _This website will..._  
+#### _A website created for Pierre's Sweet and Savory Treats. This will give a user the ability to login and add as many treats as they'd like. They may also categorize them by flavor (ex:|| sweet or savory). If a user does not login, they may still view all the sweets and treats posted!_  
 
 ---
 
