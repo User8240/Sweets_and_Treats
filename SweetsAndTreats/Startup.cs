@@ -38,11 +38,11 @@ namespace SweetsAndTreats
           //Even though the RequiredLength property is 0, we can't actually put in an
           // empty password because our application will throw an ArgumentNullException:
           // Value cannot be null error otherwise
-          options.Password.RequireDigit = false;
-          options.Password.RequiredLength = 0;
-          options.Password.RequireLowercase = false;
-          options.Password.RequireNonAlphanumeric = false;
-          options.Password.RequireUppercase = false;
+          options.Password.RequireDigit = true;
+          options.Password.RequiredLength = 8;
+          options.Password.RequireLowercase = true;
+          options.Password.RequireNonAlphanumeric = true;
+          options.Password.RequireUppercase = true;
           options.Password.RequiredUniqueChars = 0;
       });
     }

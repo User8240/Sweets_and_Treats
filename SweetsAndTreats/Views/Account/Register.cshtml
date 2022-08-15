@@ -7,6 +7,8 @@
 @model RegisterViewModel
 
 <h2>Register a new user</h2>
+<p> <em>Passwords must be 8 characters and contain a digit, symbol, & lower & uppercase letters</em>
+</p> 
 <hr />
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {

@@ -23,12 +23,11 @@ namespace SweetsAndTreats.Controllers
       _db = db;
     }
 
-    public async Task<ActionResult> Index()
+    [AllowAnonymous]
+    public ActionResult Index()
     { 
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
-      var userFlavors = _db.Flavors.Where(entry => entry.User.Id == currentUser.Id).ToList();
-      return View(userFlavors);
+      var flavorList = _db.Flavors.ToList();
+      return View(flavorList);
     }
 
     public ActionResult Create()
@@ -37,21 +36,17 @@ namespace SweetsAndTreats.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Flavor flavor, int TreatId)
+    public async Task<ActionResult> Create(Flavor flavor)
     {
-        var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var currentUser = await _userManager.FindByIdAsync(userId);
-        flavor.User = currentUser;
-        _db.Flavors.Add(flavor);
-        _db.SaveChanges();
-        if (TreatId != 0)
-        {
-            _db.FlavorTreat.Add(new FlavorTreat() { TreatId = TreatId, FlavorId = flavor.FlavorId });
-        }
-        _db.SaveChanges();
-        return RedirectToAction("Index");
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      flavor.User = currentUser;
+      _db.Flavors.Add(flavor);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
     }
 
+    [AllowAnonymous]
     public ActionResult Details(int id)
     {
       var thisFlavor = _db.Flavors
@@ -60,6 +55,7 @@ namespace SweetsAndTreats.Controllers
           .FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);
     }
+
     public ActionResult Edit(int id)
     {
       var thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
@@ -102,9 +98,17 @@ namespace SweetsAndTreats.Controllers
       if (TreatId != 0)
       {                     
         _db.FlavorTreat.Add(new FlavorTreat() { TreatId = TreatId, FlavorId = flavor.FlavorId });
-        _db.SaveChanges();                            
-                                                       
+        _db.SaveChanges();                                            
       }
+      return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult DeleteTreat(int joinId)
+    {
+      var joinEntry = _db.FlavorTreat.FirstOrDefault(entry => entry.FlavorTreatId == joinId);
+      _db.FlavorTreat.Remove(joinEntry);
+      _db.SaveChanges();
       return RedirectToAction("Index");
     }
   }
